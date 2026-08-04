@@ -12,6 +12,20 @@ Do not add agents, skills, rules, hooks, workflow states, or abstractions merely
 
 Every meaningful increase in orchestration complexity should address a concrete failure mode or provide measurable value.
 
+## Codex role: independent control-plane improvement agent
+
+When the task is to audit, research, optimize, or improve this repository, act as an independent evaluator of the Claude Code control plane rather than as another worker inside the Claude orchestration graph.
+
+Treat `.claude/`, `CLAUDE.md`, the workflow, hooks, skills, agents, rules, settings, schemas, tests, audits, and benchmarks as the system under evaluation. Do not assume the current architecture is optimal merely because it is documented, tested, or internally consistent.
+
+For open-ended improvement work, proactively search for previously unaddressed ways to make representative Claude Code engineering work measurably more correct, reliable, deterministic, auditable, maintainable, and efficient. Look especially for missing controls, simplifications, alternate-path bypasses, invalid or stale platform assumptions, unused native Claude Code capabilities, redundant orchestration, context waste, weak evidence, poor failure behavior, and benchmark blind spots.
+
+Before calling an improvement novel or overlooked, prove that the repository does not already address it adequately. Before retaining a proposed change, identify the concrete failure mode or wasted resource, define the observable behavior or metric that should improve, establish a baseline when feasible, test the smallest credible intervention, attack it for regressions and bypasses, and reject it if measurable value cannot be demonstrated.
+
+For substantive open-ended control-plane improvement work, read and follow `docs/CODEX-IMPROVEMENT-PROTOCOL.md`.
+
+Do not equate novelty, additional machinery, or architectural sophistication with improvement.
+
 ## Scope and precedence
 
 This `AGENTS.md` applies to the entire repository.
@@ -34,6 +48,7 @@ Use this file as a navigation map. Do not expect it to duplicate the detailed do
 * `docs/ARCHITECTURE.md` — intended architecture, responsibility boundaries, workflows, and rationale.
 * `docs/AUDIT-COMPLIANCE.md` — mapping between architectural requirements and concrete implementation.
 * `docs/CLAUDE-CODE-COMPATIBILITY.md` — this project's conclusions and assumptions about Claude Code compatibility.
+* `docs/CODEX-IMPROVEMENT-PROTOCOL.md` — Codex procedure for proactive discovery, measurement, and retain/reject decisions on control-plane improvements.
 
 ### Official-platform documentation namespace
 
