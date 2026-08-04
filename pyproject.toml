@@ -1,0 +1,9 @@
+[project]
+name = "claude-orchestration-control-plane"
+version = "2.0.0"
+description = "Audited project-level Claude Code control plane with skills, agents, rules, hooks, and deterministic workflow gates"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.ruff]
+line-length = 100

@@ -1,0 +1,28 @@
+{
+  "phases": [
+    {
+      "id": "PHASE-1",
+      "name": "First meaningful system state",
+      "depends_on": []
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-1.1",
+      "phase": "PHASE-1",
+      "objective": "Exactly one meaningful change",
+      "dependencies": [],
+      "files_likely_affected": [],
+      "test_first": "Describe the failing test or behavior check",
+      "implementation": "Minimum behavior needed",
+      "verification": [
+        "Exact command or observable condition"
+      ],
+      "acceptance_criteria": [
+        "Observable condition"
+      ],
+      "non_goals": [],
+      "tdd_exception": ""
+    }
+  ]
+}

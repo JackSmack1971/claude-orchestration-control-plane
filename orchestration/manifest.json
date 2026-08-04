@@ -1,0 +1,1272 @@
+{
+  "version": 1,
+  "components": [
+    {
+      "component": "CLAUDE.md",
+      "type": "policy",
+      "trigger": "always",
+      "purpose": "Permanent project truths and engineering invariants",
+      "inputs": [
+        "repository context"
+      ],
+      "outputs": [
+        "standing policy"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "main session",
+        "custom subagents"
+      ],
+      "failure_behavior": "violations are reinforced by hooks/tests where objectively detectable",
+      "verification": [
+        "scripts/audit.py policy checks"
+      ],
+      "observability": "version controlled",
+      "value_evidence": "reduces permanent context to always-true rules",
+      "source": "CLAUDE.md"
+    },
+    {
+      "component": "workflow skill",
+      "type": "orchestration",
+      "trigger": "human /workflow invocation",
+      "purpose": "Own stage ordering while main session remains conductor",
+      "inputs": [
+        "user goal",
+        "workflow state",
+        "stage artifacts"
+      ],
+      "outputs": [
+        "next-stage artifact and transition"
+      ],
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Bash(workflow.py)",
+        "bounded custom agents",
+        "procedure skills"
+      ],
+      "model": "main session",
+      "calls": [
+        "researcher",
+        "architecture-critic",
+        "implementation-critic",
+        "implementer",
+        "verifier"
+      ],
+      "depends_on": [
+        "workflow CLI",
+        "procedure skills",
+        "worker agents"
+      ],
+      "called_by": [
+        "user"
+      ],
+      "failure_behavior": "transition command refuses invalid state/artifacts",
+      "verification": [
+        "workflow unit tests",
+        "architecture audit"
+      ],
+      "observability": ".workflow/state.json and events.jsonl",
+      "value_evidence": "single canonical control-flow owner",
+      "source": ".claude/skills/workflow/SKILL.md",
+      "supporting_files": [
+        ".claude/skills/workflow/references/stage-contracts.md",
+        ".claude/skills/workflow/references/transition-table.md",
+        ".claude/skills/workflow/references/delegation-contracts.md"
+      ]
+    },
+    {
+      "component": "research skill",
+      "type": "procedure",
+      "trigger": "RESEARCH/TARGETED_RESEARCH",
+      "purpose": "Reusable evidence methodology",
+      "inputs": [
+        "bounded question"
+      ],
+      "outputs": [
+        "structured evidence result"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "researcher",
+        "main conductor"
+      ],
+      "failure_behavior": "must expose insufficient evidence",
+      "verification": [
+        "agent output contract"
+      ],
+      "observability": "research artifacts",
+      "value_evidence": "separates methodology from execution",
+      "source": ".claude/skills/research/SKILL.md",
+      "supporting_files": [
+        ".claude/skills/research/references/output-contract.md"
+      ]
+    },
+    {
+      "component": "researcher",
+      "type": "subagent",
+      "trigger": "one bounded research question",
+      "purpose": "Isolated project-aware research",
+      "inputs": [
+        "question",
+        "why it matters"
+      ],
+      "outputs": [
+        "conclusion/confidence/evidence/contradictions/unknowns/implications"
+      ],
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "model": "sonnet",
+      "calls": [],
+      "depends_on": [
+        "research skill"
+      ],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "returns uncertainty rather than guessing",
+      "verification": [
+        "structured output contract"
+      ],
+      "observability": "subagent transcript + research artifact",
+      "value_evidence": "disposable context isolation",
+      "source": ".claude/agents/researcher.md"
+    },
+    {
+      "component": "architecture-critic",
+      "type": "subagent",
+      "trigger": "CRITIQUE_1",
+      "purpose": "Adversarial epistemic and architectural critique",
+      "inputs": [
+        "requirements",
+        "synthesis",
+        "plan-v1"
+      ],
+      "outputs": [
+        "severity findings",
+        "research questions",
+        "verdict"
+      ],
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep"
+      ],
+      "model": "sonnet",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "cannot repair plan or write code",
+      "verification": [
+        "critique artifact headings"
+      ],
+      "observability": "critique-v1.md",
+      "value_evidence": "independent adversarial objective",
+      "source": ".claude/agents/architecture-critic.md"
+    },
+    {
+      "component": "implementation-critic",
+      "type": "subagent",
+      "trigger": "CRITIQUE_2",
+      "purpose": "Implementation-readiness critique distinct from architecture critique",
+      "inputs": [
+        "repaired plan"
+      ],
+      "outputs": [
+        "sequencing/test/migration/rollback/observability findings",
+        "verdict"
+      ],
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep"
+      ],
+      "model": "sonnet",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "cannot repair plan or write code",
+      "verification": [
+        "critique-v2 artifact headings"
+      ],
+      "observability": "critique-v2.md",
+      "value_evidence": "non-duplicate second critique",
+      "source": ".claude/agents/implementation-critic.md"
+    },
+    {
+      "component": "implementer",
+      "type": "subagent",
+      "trigger": "one selected EXECUTION task",
+      "purpose": "Atomic scoped code change",
+      "inputs": [
+        "task contract",
+        "dependency state"
+      ],
+      "outputs": [
+        "changes",
+        "tests",
+        "commands",
+        "risks"
+      ],
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Edit",
+        "Write",
+        "Bash"
+      ],
+      "model": "inherit",
+      "calls": [],
+      "depends_on": [
+        "tdd skill"
+      ],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "surface blocker instead of scope expansion",
+      "verification": [
+        "TDD evidence",
+        "task completion gate"
+      ],
+      "observability": "execution-state.json + event log",
+      "value_evidence": "implementation context isolated per atomic task",
+      "source": ".claude/agents/implementer.md"
+    },
+    {
+      "component": "verifier",
+      "type": "subagent",
+      "trigger": "phase/final review",
+      "purpose": "Independent evidence-based verification",
+      "inputs": [
+        "acceptance criteria",
+        "changed system",
+        "verification commands"
+      ],
+      "outputs": [
+        "pass/fail evidence and residual risks"
+      ],
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Bash"
+      ],
+      "model": "sonnet",
+      "calls": [],
+      "depends_on": [
+        "verification skill"
+      ],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "reports FAIL; does not repair",
+      "verification": [
+        "final deterministic checks"
+      ],
+      "observability": "phase review and final verification artifacts",
+      "value_evidence": "separates implementation from acceptance judgment",
+      "source": ".claude/agents/verifier.md"
+    },
+    {
+      "component": "workflow CLI",
+      "type": "enforcement",
+      "trigger": "stage/task transition",
+      "purpose": "Deterministic state/artifact/TDD gates",
+      "inputs": [
+        "workflow state",
+        "artifacts",
+        "test commands"
+      ],
+      "outputs": [
+        "validated state transitions",
+        "event log",
+        "verification evidence"
+      ],
+      "tools": [
+        "local filesystem",
+        "subprocess"
+      ],
+      "model": "none",
+      "calls": [],
+      "depends_on": [
+        "workflow.json",
+        "project-checks.json"
+      ],
+      "called_by": [
+        "workflow skill",
+        "humans",
+        "CI tests"
+      ],
+      "failure_behavior": "non-zero exit blocks transition",
+      "verification": [
+        "unit tests"
+      ],
+      "observability": ".workflow/state.json and events.jsonl",
+      "value_evidence": "moves objective invariants out of prompts",
+      "source": "scripts/workflow.py"
+    },
+    {
+      "component": "architecture audit",
+      "type": "enforcement",
+      "trigger": "CI/manual",
+      "purpose": "Machine-check architectural contracts and dependency graph",
+      "inputs": [
+        "manifest",
+        "workflow",
+        "Claude config"
+      ],
+      "outputs": [
+        "pass/fail report"
+      ],
+      "tools": [
+        "Python standard library"
+      ],
+      "model": "none",
+      "calls": [],
+      "depends_on": [
+        "manifest",
+        "scorecard"
+      ],
+      "called_by": [
+        "CI",
+        "audit skill",
+        "humans"
+      ],
+      "failure_behavior": "non-zero exit on failed invariant",
+      "verification": [
+        "unit tests"
+      ],
+      "observability": "terminal/CI output",
+      "value_evidence": "prevents architecture drift",
+      "source": "scripts/audit.py"
+    },
+    {
+      "component": "benchmark harness",
+      "type": "evaluation",
+      "trigger": "manual comparative evaluation",
+      "purpose": "Record comparable current-vs-simplified workflow metrics",
+      "inputs": [
+        "benchmark case",
+        "variant",
+        "observed metrics"
+      ],
+      "outputs": [
+        "JSONL records",
+        "summary"
+      ],
+      "tools": [
+        "Python standard library"
+      ],
+      "model": "none",
+      "calls": [],
+      "depends_on": [
+        "benchmark cases"
+      ],
+      "called_by": [
+        "humans/CI extensions"
+      ],
+      "failure_behavior": "rejects incomplete metrics",
+      "verification": [
+        "unit tests"
+      ],
+      "observability": "benchmark-results/*.jsonl",
+      "value_evidence": "supports evidence-based retention of complexity",
+      "source": "scripts/benchmark.py"
+    },
+    {
+      "component": "ideate skill",
+      "type": "procedure",
+      "source": ".claude/skills/ideate/SKILL.md",
+      "trigger": "IDEATION / PROBLEM_DEFINITION",
+      "purpose": "Frame problem, goals, non-goals, constraints, acceptance criteria, assumptions, and unknowns",
+      "inputs": [
+        "raw request"
+      ],
+      "outputs": [
+        "ideation/problem framing"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "must expose unknowns rather than guess",
+      "verification": [
+        "artifact heading/content gates"
+      ],
+      "observability": "ideation.md and problem.md",
+      "value_evidence": "keeps framing methodology out of permanent policy"
+    },
+    {
+      "component": "planning skill",
+      "type": "procedure",
+      "source": ".claude/skills/planning/SKILL.md",
+      "trigger": "PLAN_V1",
+      "purpose": "Convert validated requirements and evidence into an explicit first plan",
+      "inputs": [
+        "requirements",
+        "synthesis"
+      ],
+      "outputs": [
+        "plan-v1"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "must preserve unresolved assumptions",
+      "verification": [
+        "plan artifact contract"
+      ],
+      "observability": "plan-v1.md",
+      "value_evidence": "separates plan methodology from orchestration",
+      "supporting_files": [
+        ".claude/skills/planning/references/quality-gates.md"
+      ]
+    },
+    {
+      "component": "plan-repair skill",
+      "type": "procedure",
+      "source": ".claude/skills/plan-repair/SKILL.md",
+      "trigger": "PLAN_V2 / PLAN_FINAL",
+      "purpose": "Repair plans traceably from critique and new evidence",
+      "inputs": [
+        "critic findings",
+        "new evidence",
+        "prior plan"
+      ],
+      "outputs": [
+        "repaired plan"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "material findings must be addressed or explicitly rejected",
+      "verification": [
+        "plan artifact contract"
+      ],
+      "observability": "plan-v2.md and plan-final.md",
+      "value_evidence": "prevents critic and repair roles from collapsing"
+    },
+    {
+      "component": "phase-decomposition skill",
+      "type": "procedure",
+      "source": ".claude/skills/phase-decomposition/SKILL.md",
+      "trigger": "PHASE_DECOMPOSITION",
+      "purpose": "Create meaningful phases and atomic acyclic task DAG",
+      "inputs": [
+        "approved final plan"
+      ],
+      "outputs": [
+        "phase artifacts",
+        "task-graph.json"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow conductor"
+      ],
+      "failure_behavior": "oversized/invalid/cyclic task graph is rejected",
+      "verification": [
+        "task graph validator"
+      ],
+      "observability": "phase files and task graph",
+      "value_evidence": "makes execution contracts explicit before coding",
+      "supporting_files": [
+        ".claude/skills/phase-decomposition/references/task-dag-contract.md"
+      ]
+    },
+    {
+      "component": "tdd skill",
+      "type": "procedure",
+      "source": ".claude/skills/tdd/SKILL.md",
+      "trigger": "EXECUTION",
+      "purpose": "Define atomic RED/GREEN/REFACTOR/VERIFY execution semantics",
+      "inputs": [
+        "selected task"
+      ],
+      "outputs": [
+        "TDD behavior/evidence requirements"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "implementer",
+        "workflow conductor"
+      ],
+      "failure_behavior": "cannot claim evidence that was not executed",
+      "verification": [
+        "workflow CLI evidence gate"
+      ],
+      "observability": "execution state and task evidence",
+      "value_evidence": "turns TDD from advice into an enforceable procedure",
+      "supporting_files": [
+        ".claude/skills/tdd/references/transition-rules.md"
+      ]
+    },
+    {
+      "component": "verification skill",
+      "type": "procedure",
+      "source": ".claude/skills/verification/SKILL.md",
+      "trigger": "PHASE_REVIEW / FINAL_VERIFICATION",
+      "purpose": "Define evidence-based acceptance verification",
+      "inputs": [
+        "acceptance criteria",
+        "changed system"
+      ],
+      "outputs": [
+        "verification verdict"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "verifier",
+        "workflow conductor"
+      ],
+      "failure_behavior": "failed required check blocks completion",
+      "verification": [
+        "workflow final verification"
+      ],
+      "observability": "review artifacts and command evidence",
+      "value_evidence": "separates implementation confidence from evidence",
+      "supporting_files": [
+        ".claude/skills/verification/references/review-contract.md"
+      ]
+    },
+    {
+      "component": "audit skill",
+      "type": "procedure",
+      "source": ".claude/skills/audit/SKILL.md",
+      "trigger": "human /audit invocation",
+      "purpose": "Run and interpret architecture audit",
+      "inputs": [
+        "repository architecture"
+      ],
+      "outputs": [
+        "audit result"
+      ],
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Bash(audit.py)"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "architecture audit"
+      ],
+      "called_by": [
+        "user"
+      ],
+      "failure_behavior": "audit failures are architecture defects",
+      "verification": [
+        "scripts/audit.py"
+      ],
+      "observability": "audit output",
+      "value_evidence": "human-facing entry point for architecture regression checks"
+    },
+    {
+      "component": "project settings",
+      "type": "policy/enforcement",
+      "source": ".claude/settings.json",
+      "trigger": "Claude Code session lifecycle",
+      "purpose": "Configure deny rules and lifecycle hooks",
+      "inputs": [
+        "tool calls",
+        "session lifecycle"
+      ],
+      "outputs": [
+        "permission/hook behavior"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "guard_write hook",
+        "guard_bash hook",
+        "invalidate_evidence hook",
+        "stop_gate hook",
+        "session_context hook"
+      ],
+      "called_by": [
+        "Claude Code"
+      ],
+      "failure_behavior": "invalid settings causes CI audit failure",
+      "verification": [
+        "settings JSON tests",
+        "architecture audit"
+      ],
+      "observability": "Claude Code settings UI/debug logs",
+      "value_evidence": "central deterministic enforcement wiring"
+    },
+    {
+      "component": "project checks config",
+      "type": "policy/enforcement",
+      "source": ".claude/project-checks.json",
+      "trigger": "FINAL_VERIFICATION",
+      "purpose": "Declare repository-specific deterministic verification commands",
+      "inputs": [
+        "project commands"
+      ],
+      "outputs": [
+        "configured final checks"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow CLI"
+      ],
+      "failure_behavior": "failed command blocks final verification",
+      "verification": [
+        "workflow smoke test"
+      ],
+      "observability": "final-verification.json",
+      "value_evidence": "keeps application-specific checks data-driven"
+    },
+    {
+      "component": "guard_write hook",
+      "type": "enforcement",
+      "source": ".claude/hooks/guard_write.py",
+      "trigger": "PreToolUse Write|Edit",
+      "purpose": "Block sensitive, outside-root, generated, and protected-path writes",
+      "inputs": [
+        "hook JSON"
+      ],
+      "outputs": [
+        "allow/block exit status"
+      ],
+      "tools": [
+        "filesystem path validation"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "project settings"
+      ],
+      "failure_behavior": "exit 2 blocks unsafe write",
+      "verification": [
+        "hook unit tests"
+      ],
+      "observability": "Claude hook feedback",
+      "value_evidence": "objectively detectable write safety belongs in enforcement"
+    },
+    {
+      "component": "guard_bash hook",
+      "type": "enforcement",
+      "source": ".claude/hooks/guard_bash.py",
+      "trigger": "PreToolUse Bash",
+      "purpose": "Block obviously destructive shell/Git operations",
+      "inputs": [
+        "hook JSON"
+      ],
+      "outputs": [
+        "allow/block exit status"
+      ],
+      "tools": [
+        "regex validation"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "project settings"
+      ],
+      "failure_behavior": "exit 2 blocks destructive command",
+      "verification": [
+        "hook unit tests"
+      ],
+      "observability": "Claude hook feedback",
+      "value_evidence": "moves detectable destructive-command policy out of prompts"
+    },
+    {
+      "component": "invalidate_evidence hook",
+      "type": "enforcement",
+      "source": ".claude/hooks/invalidate_evidence.py",
+      "trigger": "PostToolUse Write|Edit",
+      "purpose": "Invalidate stale related/final verification after edits",
+      "inputs": [
+        "hook JSON",
+        "workflow state"
+      ],
+      "outputs": [
+        "updated evidence/state"
+      ],
+      "tools": [
+        "local workflow files"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "workflow CLI"
+      ],
+      "called_by": [
+        "project settings"
+      ],
+      "failure_behavior": "stale evidence is removed/downgraded",
+      "verification": [
+        "hook unit tests"
+      ],
+      "observability": "workflow state + hook context",
+      "value_evidence": "prevents verification evidence from surviving later edits"
+    },
+    {
+      "component": "stop_gate hook",
+      "type": "enforcement",
+      "source": ".claude/hooks/stop_gate.py",
+      "trigger": "Stop during FINAL_VERIFICATION",
+      "purpose": "Prevent final-looking completion while deterministic verification is absent or failed",
+      "inputs": [
+        "hook JSON",
+        "workflow state",
+        "final verification"
+      ],
+      "outputs": [
+        "allow/block exit status"
+      ],
+      "tools": [
+        "local workflow files"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "workflow CLI"
+      ],
+      "called_by": [
+        "project settings"
+      ],
+      "failure_behavior": "exit 2 continues agent until final verification is valid",
+      "verification": [
+        "hook behavior + smoke path"
+      ],
+      "observability": "Claude hook feedback",
+      "value_evidence": "completion invariant is deterministic rather than remembered"
+    },
+    {
+      "component": "workflow definition",
+      "type": "orchestration",
+      "source": "orchestration/workflow.json",
+      "trigger": "workflow CLI load",
+      "purpose": "Claude-independent state machine, artifact contracts, and TDD states",
+      "inputs": [
+        "none"
+      ],
+      "outputs": [
+        "canonical workflow data"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "workflow CLI",
+        "architecture audit"
+      ],
+      "failure_behavior": "invalid/incomplete workflow fails audit",
+      "verification": [
+        "architecture audit",
+        "workflow tests"
+      ],
+      "observability": "version-controlled JSON",
+      "value_evidence": "keeps control-flow model independent of Claude primitives"
+    },
+    {
+      "component": "scorecard definition",
+      "type": "evaluation",
+      "source": "orchestration/scorecard.json",
+      "trigger": "architecture audit",
+      "purpose": "Define 12 component audit dimensions and thresholds",
+      "inputs": [
+        "component metadata"
+      ],
+      "outputs": [
+        "scoring criteria"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "architecture audit"
+      ],
+      "failure_behavior": "missing dimensions/low score fail audit",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "version-controlled JSON",
+      "value_evidence": "makes component quality criteria explicit"
+    },
+    {
+      "component": "benchmark cases",
+      "type": "evaluation",
+      "source": "orchestration/benchmarks/cases.json",
+      "trigger": "comparative benchmark run",
+      "purpose": "Define representative task categories and required observed metrics",
+      "inputs": [
+        "benchmark design"
+      ],
+      "outputs": [
+        "case/metric contract"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "benchmark harness"
+      ],
+      "failure_behavior": "incomplete metrics are rejected",
+      "verification": [
+        "benchmark harness validation"
+      ],
+      "observability": "version-controlled JSON",
+      "value_evidence": "supports current-vs-candidate evaluation without fabricated results"
+    },
+    {
+      "component": "workflow smoke test",
+      "type": "verification",
+      "source": "scripts/smoke_test.py",
+      "trigger": "CI/manual",
+      "purpose": "Exercise deterministic state, TDD, phase review, final verification, and completion end to end",
+      "inputs": [
+        "repository system"
+      ],
+      "outputs": [
+        "pass/fail"
+      ],
+      "tools": [
+        "workflow CLI module",
+        "subprocess"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "workflow CLI",
+        "architecture audit"
+      ],
+      "called_by": [
+        "CI",
+        "humans"
+      ],
+      "failure_behavior": "non-zero exit on broken end-to-end mechanics",
+      "verification": [
+        "CI"
+      ],
+      "observability": "terminal/CI output",
+      "value_evidence": "catches integration bugs unit checks miss"
+    },
+    {
+      "component": "control-plane rule",
+      "type": "policy",
+      "source": ".claude/rules/00-control-plane.md",
+      "trigger": "always",
+      "purpose": "Permanent orchestration ownership and evidence invariants",
+      "inputs": [
+        "Claude Code session"
+      ],
+      "outputs": [
+        "standing control-plane constraints"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "main session",
+        "custom subagents"
+      ],
+      "failure_behavior": "violations are caught by state machine/audit where detectable",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "version controlled and loaded by Claude Code",
+      "value_evidence": "keeps permanent orchestration truths out of procedural skills"
+    },
+    {
+      "component": "engineering rule",
+      "type": "policy",
+      "source": ".claude/rules/10-engineering.md",
+      "trigger": "always",
+      "purpose": "General scope and implementation discipline",
+      "inputs": [
+        "code changes"
+      ],
+      "outputs": [
+        "standing engineering constraints"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "main session",
+        "implementer"
+      ],
+      "failure_behavior": "semantic violations are surfaced by review/testing",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "version controlled",
+      "value_evidence": "keeps reusable permanent engineering constraints modular"
+    },
+    {
+      "component": "testing rule",
+      "type": "policy",
+      "source": ".claude/rules/20-testing.md",
+      "trigger": "always",
+      "purpose": "Permanent testing and evidence truth constraints",
+      "inputs": [
+        "behavior changes",
+        "test evidence"
+      ],
+      "outputs": [
+        "standing verification constraints"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "workflow CLI"
+      ],
+      "called_by": [
+        "main session",
+        "implementer",
+        "verifier"
+      ],
+      "failure_behavior": "TDD/final gates refuse unsupported completion",
+      "verification": [
+        "workflow tests",
+        "architecture audit"
+      ],
+      "observability": "state/event evidence plus version control",
+      "value_evidence": "reinforces test-truth rules while deterministic CLI records evidence"
+    },
+    {
+      "component": "security rule",
+      "type": "policy",
+      "source": ".claude/rules/30-security.md",
+      "trigger": "always",
+      "purpose": "Permanent secret-handling and security constraints",
+      "inputs": [
+        "repository operations"
+      ],
+      "outputs": [
+        "standing security constraints"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "guard_write hook"
+      ],
+      "called_by": [
+        "main session",
+        "custom subagents"
+      ],
+      "failure_behavior": "secret/sensitive writes blocked where detectable",
+      "verification": [
+        "architecture audit",
+        "hook tests"
+      ],
+      "observability": "hook feedback and version control",
+      "value_evidence": "keeps security rules always available and supports deterministic enforcement"
+    },
+    {
+      "component": "git safety rule",
+      "type": "policy",
+      "source": ".claude/rules/40-git-safety.md",
+      "trigger": "always",
+      "purpose": "Permanent safe git/filesystem practices",
+      "inputs": [
+        "git/filesystem operations"
+      ],
+      "outputs": [
+        "standing safety constraints"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "guard_bash hook"
+      ],
+      "called_by": [
+        "main session",
+        "implementer"
+      ],
+      "failure_behavior": "destructive commands blocked where detectable",
+      "verification": [
+        "architecture audit",
+        "hook tests"
+      ],
+      "observability": "hook feedback and version control",
+      "value_evidence": "reduces accidental destructive recovery behavior"
+    },
+    {
+      "component": "control-plane maintenance rule",
+      "type": "policy",
+      "source": ".claude/rules/90-control-plane-files.md",
+      "trigger": "path-scoped to control-plane files",
+      "purpose": "Rules for safely changing the orchestration system itself",
+      "inputs": [
+        "control-plane file access"
+      ],
+      "outputs": [
+        "maintenance constraints"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "architecture audit"
+      ],
+      "called_by": [
+        "main session"
+      ],
+      "failure_behavior": "audit failure blocks claiming control-plane validity",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "loaded on matching paths and version controlled",
+      "value_evidence": "keeps specialized maintenance policy out of every session turn"
+    },
+    {
+      "component": "workflow status command",
+      "type": "entrypoint",
+      "source": ".claude/commands/workflow-status.md",
+      "trigger": "human /workflow-status",
+      "purpose": "Read-only workflow status entry point",
+      "inputs": [
+        "active workflow"
+      ],
+      "outputs": [
+        "status report"
+      ],
+      "tools": [
+        "Bash(workflow.py status)"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "workflow CLI"
+      ],
+      "called_by": [
+        "user"
+      ],
+      "failure_behavior": "reports absence/invalid state without mutation",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "command output",
+      "value_evidence": "human-facing observability without duplicating orchestration"
+    },
+    {
+      "component": "workflow validate command",
+      "type": "entrypoint",
+      "source": ".claude/commands/workflow-validate.md",
+      "trigger": "human /workflow-validate",
+      "purpose": "Read-only current-stage validation entry point",
+      "inputs": [
+        "active workflow artifact"
+      ],
+      "outputs": [
+        "validation report"
+      ],
+      "tools": [
+        "Bash(workflow.py validate)"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "workflow CLI"
+      ],
+      "called_by": [
+        "user"
+      ],
+      "failure_behavior": "returns gate errors without advancement",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "command output",
+      "value_evidence": "lets humans test gates without changing state"
+    },
+    {
+      "component": "control-plane doctor command",
+      "type": "entrypoint",
+      "source": ".claude/commands/control-plane-doctor.md",
+      "trigger": "human /control-plane-doctor",
+      "purpose": "Run the structural control-plane audit from Claude Code",
+      "inputs": [
+        "repository control plane"
+      ],
+      "outputs": [
+        "verification report"
+      ],
+      "tools": [
+        "Bash(python3 scripts/audit.py)"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "architecture audit"
+      ],
+      "called_by": [
+        "user"
+      ],
+      "failure_behavior": "reports audit failures; makes no repairs",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "command output and CI",
+      "value_evidence": "explicit operator entry point for control-plane health"
+    },
+    {
+      "component": "session_context hook",
+      "type": "enforcement",
+      "source": ".claude/hooks/session_context.py",
+      "trigger": "SessionStart",
+      "purpose": "Inject active workflow state into Claude context on start/resume",
+      "inputs": [
+        "SessionStart hook JSON",
+        ".workflow/state.json"
+      ],
+      "outputs": [
+        "additionalContext"
+      ],
+      "tools": [
+        "filesystem read"
+      ],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "project settings"
+      ],
+      "failure_behavior": "fails open if no valid active state exists",
+      "verification": [
+        "architecture audit"
+      ],
+      "observability": "Claude hook context/debug logs",
+      "value_evidence": "reduces state-loss after resume/compaction without bloating CLAUDE.md"
+    },
+    {
+      "component": "settings local example",
+      "type": "support",
+      "source": ".claude/settings.local.example.json",
+      "trigger": "manual copy by operator",
+      "purpose": "Document safe local permission customization without committing machine-specific settings",
+      "inputs": [
+        "project commands"
+      ],
+      "outputs": [
+        "example local settings"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [],
+      "called_by": [
+        "user"
+      ],
+      "failure_behavior": "example only; not loaded unless copied",
+      "verification": [
+        "JSON parse in architecture audit"
+      ],
+      "observability": "version controlled",
+      "value_evidence": "separates project policy from developer-specific approvals"
+    },
+    {
+      "component": "research schema",
+      "type": "contract",
+      "source": "orchestration/schemas/research-result.schema.json",
+      "trigger": "research artifact tooling",
+      "purpose": "Machine-readable structured research result contract",
+      "inputs": [
+        "research worker result"
+      ],
+      "outputs": [
+        "schema validation target"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "research skill"
+      ],
+      "called_by": [
+        "future tooling",
+        "auditors"
+      ],
+      "failure_behavior": "invalid structure can be rejected by schema-aware tooling",
+      "verification": [
+        "JSON parse in architecture audit"
+      ],
+      "observability": "version controlled",
+      "value_evidence": "makes worker output structure explicit and machine-readable"
+    },
+    {
+      "component": "task graph schema",
+      "type": "contract",
+      "source": "orchestration/schemas/task-graph.schema.json",
+      "trigger": "phase decomposition tooling",
+      "purpose": "Machine-readable atomic task DAG contract",
+      "inputs": [
+        "task graph"
+      ],
+      "outputs": [
+        "schema validation target"
+      ],
+      "tools": [],
+      "model": "n/a",
+      "calls": [],
+      "depends_on": [
+        "phase-decomposition skill"
+      ],
+      "called_by": [
+        "workflow CLI",
+        "future tooling"
+      ],
+      "failure_behavior": "workflow CLI separately rejects invalid graph invariants",
+      "verification": [
+        "JSON parse in architecture audit",
+        "workflow tests"
+      ],
+      "observability": "version controlled",
+      "value_evidence": "makes DAG contract portable and inspectable"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+.claude/
+├── agents/
+│   ├── architecture-critic.md
+│   ├── implementation-critic.md
+│   ├── implementer.md
+│   ├── researcher.md
+│   └── verifier.md
+├── commands/
+│   ├── control-plane-doctor.md
+│   ├── workflow-status.md
+│   └── workflow-validate.md
+├── hooks/
+│   ├── guard_bash.py
+│   ├── guard_write.py
+│   ├── invalidate_evidence.py
+│   ├── session_context.py
+│   └── stop_gate.py
+├── rules/
+│   ├── 00-control-plane.md
+│   ├── 10-engineering.md
+│   ├── 20-testing.md
+│   ├── 30-security.md
+│   ├── 40-git-safety.md
+│   └── 90-control-plane-files.md
+├── skills/
+│   ├── audit/SKILL.md
+│   ├── ideate/SKILL.md
+│   ├── phase-decomposition/SKILL.md + references/
+│   ├── plan-repair/SKILL.md
+│   ├── planning/SKILL.md + references/
+│   ├── research/SKILL.md + references/
+│   ├── tdd/SKILL.md + references/
+│   ├── verification/SKILL.md + references/
+│   └── workflow/SKILL.md + references/
+├── project-checks.json
+├── settings.json
+└── settings.local.example.json
+
+CLAUDE.md
+orchestration/
+├── workflow.json
+├── manifest.json
+├── scorecard.json
+├── schemas/
+├── templates/
+└── benchmarks/
+scripts/
+├── workflow.py
+├── audit.py
+├── benchmark.py
+├── smoke_test.py
+└── install_into.py
+tests/
+.github/workflows/

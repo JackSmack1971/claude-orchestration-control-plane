@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "initial_state": "IDEATION",
+  "states": [
+    "IDEATION",
+    "PROBLEM_DEFINITION",
+    "RESEARCH",
+    "EVIDENCE_SYNTHESIS",
+    "PLAN_V1",
+    "CRITIQUE_1",
+    "TARGETED_RESEARCH",
+    "PLAN_V2",
+    "CRITIQUE_2",
+    "PLAN_FINAL",
+    "PHASE_DECOMPOSITION",
+    "EXECUTION",
+    "PHASE_REVIEW",
+    "FINAL_VERIFICATION",
+    "COMPLETE"
+  ],
+  "linear_transitions": {
+    "IDEATION": "PROBLEM_DEFINITION",
+    "PROBLEM_DEFINITION": "RESEARCH",
+    "RESEARCH": "EVIDENCE_SYNTHESIS",
+    "EVIDENCE_SYNTHESIS": "PLAN_V1",
+    "PLAN_V1": "CRITIQUE_1",
+    "CRITIQUE_1": "TARGETED_RESEARCH",
+    "TARGETED_RESEARCH": "PLAN_V2",
+    "PLAN_V2": "CRITIQUE_2",
+    "CRITIQUE_2": "PLAN_FINAL",
+    "PLAN_FINAL": "PHASE_DECOMPOSITION",
+    "PHASE_DECOMPOSITION": "EXECUTION"
+  },
+  "artifact_requirements": {
+    "IDEATION": [
+      "ideation.md"
+    ],
+    "PROBLEM_DEFINITION": [
+      "problem.md"
+    ],
+    "RESEARCH": [
+      "research.md"
+    ],
+    "EVIDENCE_SYNTHESIS": [
+      "synthesis.md"
+    ],
+    "PLAN_V1": [
+      "plan-v1.md"
+    ],
+    "CRITIQUE_1": [
+      "critique-v1.md"
+    ],
+    "TARGETED_RESEARCH": [
+      "research-delta.md"
+    ],
+    "PLAN_V2": [
+      "plan-v2.md"
+    ],
+    "CRITIQUE_2": [
+      "critique-v2.md"
+    ],
+    "PLAN_FINAL": [
+      "plan-final.md"
+    ],
+    "PHASE_DECOMPOSITION": [
+      "task-graph.json"
+    ]
+  },
+  "artifact_headings": {
+    "ideation.md": [
+      "Raw request",
+      "Desired outcome",
+      "Assumptions",
+      "Open questions"
+    ],
+    "problem.md": [
+      "Problem",
+      "Goals",
+      "Non-goals",
+      "Constraints",
+      "Acceptance Criteria"
+    ],
+    "research.md": [
+      "Questions",
+      "Evidence",
+      "Contradictions",
+      "Unknowns",
+      "Implications"
+    ],
+    "synthesis.md": [
+      "Validated facts",
+      "Supported inferences",
+      "Remaining unknowns",
+      "Constraints on the plan"
+    ],
+    "plan-v1.md": [
+      "Validated Requirements",
+      "Architecture",
+      "Ordered Implementation Strategy",
+      "Test Strategy",
+      "Verification"
+    ],
+    "critique-v1.md": [
+      "BLOCKER",
+      "MAJOR",
+      "QUESTION",
+      "Required Targeted Research",
+      "Verdict"
+    ],
+    "research-delta.md": [
+      "Questions from Critique",
+      "New Evidence",
+      "Remaining Unknowns",
+      "Required Plan Changes"
+    ],
+    "plan-v2.md": [
+      "Validated Requirements",
+      "Architecture",
+      "Ordered Implementation Strategy",
+      "Test Strategy",
+      "Verification"
+    ],
+    "critique-v2.md": [
+      "BLOCKER",
+      "MAJOR",
+      "QUESTION",
+      "Test and Verification Gaps",
+      "Verdict"
+    ],
+    "plan-final.md": [
+      "Validated Requirements",
+      "Architecture",
+      "Ordered Implementation Strategy",
+      "Test Strategy",
+      "Verification"
+    ]
+  },
+  "tdd_states": [
+    "SELECTED",
+    "UNDERSTAND_EXISTING_BEHAVIOR",
+    "TEST_WRITTEN",
+    "RED_CONFIRMED",
+    "IMPLEMENT_MINIMAL",
+    "GREEN_CONFIRMED",
+    "REFACTOR",
+    "RELATED_VERIFIED",
+    "COMPLETE"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "small-bug",
+      "category": "small bug",
+      "prompt": "Fix a localized incorrect boundary condition with regression coverage."
+    },
+    {
+      "id": "ambiguous-bug",
+      "category": "ambiguous bug",
+      "prompt": "Investigate an intermittent failure whose reproduction steps are incomplete."
+    },
+    {
+      "id": "isolated-feature",
+      "category": "new isolated feature",
+      "prompt": "Add one bounded feature behind an existing interface with tests."
+    },
+    {
+      "id": "cross-cutting-feature",
+      "category": "cross-cutting feature",
+      "prompt": "Add a feature spanning persistence, service, API, and UI boundaries."
+    },
+    {
+      "id": "refactor",
+      "category": "refactor",
+      "prompt": "Refactor a high-coupling module without changing behavior."
+    },
+    {
+      "id": "dependency-integration",
+      "category": "dependency/library integration",
+      "prompt": "Integrate a version-sensitive external library with compatibility checks."
+    },
+    {
+      "id": "migration",
+      "category": "migration",
+      "prompt": "Migrate stored data and code paths while retaining rollback safety."
+    },
+    {
+      "id": "performance",
+      "category": "performance problem",
+      "prompt": "Improve a measured hot path without behavior regression."
+    },
+    {
+      "id": "security",
+      "category": "security-sensitive change",
+      "prompt": "Change authorization behavior and prove negative cases."
+    },
+    {
+      "id": "poor-spec",
+      "category": "poorly specified product request",
+      "prompt": "Turn a vague product request into validated acceptance criteria before implementation."
+    }
+  ],
+  "required_metrics": [
+    "correctness",
+    "tests_introduced",
+    "rework",
+    "critique_findings_caught",
+    "findings_ignored",
+    "tool_calls",
+    "subagent_calls",
+    "research_duplication",
+    "context_consumed",
+    "latency_seconds",
+    "human_interventions",
+    "unnecessary_files_changed"
+  ]
+}

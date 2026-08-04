@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "scale": {
+    "0": "missing/unclear",
+    "1": "weak",
+    "2": "adequate",
+    "3": "explicit/measurable"
+  },
+  "dimensions": [
+    "purpose",
+    "trigger",
+    "input_contract",
+    "output_contract",
+    "scope",
+    "context_efficiency",
+    "tool_permissions",
+    "failure_behavior",
+    "verification",
+    "composability",
+    "observability",
+    "value"
+  ],
+  "minimum_component_score": 28,
+  "minimum_average_dimension_score": 2.5,
+  "guidance": {
+    "purpose": "singular and explicit",
+    "trigger": "deterministic or clearly bounded",
+    "input_contract": "explicit inputs",
+    "output_contract": "structured outputs",
+    "scope": "orthogonal to neighboring components",
+    "context_efficiency": "avoids permanent/redundant context",
+    "tool_permissions": "least privilege",
+    "failure_behavior": "defined refusal/block path",
+    "verification": "measurable",
+    "composability": "acyclic dependencies and clean contracts",
+    "observability": "traceable state/evidence",
+    "value": "benchmarkable reason to exist"
+  }
+}

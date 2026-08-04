@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResearchResult",
+  "type": "object",
+  "required": ["question", "conclusion", "confidence", "evidence", "contradictions", "unknowns", "implications_for_plan"],
+  "properties": {
+    "question": {"type": "string", "minLength": 1},
+    "conclusion": {"type": "string", "minLength": 1},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "evidence": {"type": "array", "items": {"type": "object"}},
+    "contradictions": {"type": "array"},
+    "unknowns": {"type": "array"},
+    "implications_for_plan": {"type": "array"}
+  },
+  "additionalProperties": true
+}
